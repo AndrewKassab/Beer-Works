@@ -1,0 +1,46 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven output directory
+target/
+
+# Eclipse specific
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA specific
+.idea/
+*.iml
+*.iws
+
+# VS Code specific
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Node modules for any frontend aspects
+node_modules/
+
+# Maven local repository
+/.mvn/
+mvnw
+mvnw.cmd
+
+# Environment configuration files
+.env
+.env.local
