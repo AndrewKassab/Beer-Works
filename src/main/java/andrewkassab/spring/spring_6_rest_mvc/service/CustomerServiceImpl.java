@@ -1,95 +1,94 @@
 package andrewkassab.spring.spring_6_rest_mvc.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import andrewkassab.spring.spring_6_rest_mvc.mapper.CustomerMapper;
+import andrewkassab.spring.spring_6_rest_mvc.model.CustomerDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import andrewkassab.spring.spring_6_rest_mvc.model.Customer;
+import java.time.LocalDateTime;
+import java.util.*;
 
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-	private Map<UUID, Customer> customerMap;
-	
-	private CustomerMapper mapper;
-	
+	private Map<UUID, CustomerDTO> customerMap;
+
 	public CustomerServiceImpl() {
+		CustomerDTO customer1 = CustomerDTO.builder()
+				.id(UUID.randomUUID())
+				.name("Customer 1")
+				.version(1)
+				.createdDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
+				.build();
+
+		CustomerDTO customer2 = CustomerDTO.builder()
+				.id(UUID.randomUUID())
+				.name("Customer 2")
+				.version(1)
+				.createdDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
+				.build();
+
+		CustomerDTO customer3 = CustomerDTO.builder()
+				.id(UUID.randomUUID())
+				.name("Customer 3")
+				.version(1)
+				.createdDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
+				.build();
+
 		customerMap = new HashMap<>();
-		
-		var customerOne = Customer.builder()
-				.id(UUID.randomUUID())
-				.customerName("Customer 1")
-				.version(1)
-				.createdDate(LocalDateTime.now())
-				.lastModifiedDate(LocalDateTime.now())
-				.build();
-			
-		var customerTwo = Customer.builder()
-				.id(UUID.randomUUID())
-				.customerName("Customer 2")
-				.version(1)
-				.createdDate(LocalDateTime.now())
-				.lastModifiedDate(LocalDateTime.now())
-				.build();
-
-		var customerThree = Customer.builder()
-				.id(UUID.randomUUID())
-				.customerName("Customer 3")
-				.version(1)
-				.createdDate(LocalDateTime.now())
-				.lastModifiedDate(LocalDateTime.now())
-				.build();
-		
-		customerMap.put(customerOne.getId(), customerOne);
-		customerMap.put(customerTwo.getId(), customerTwo);
-		customerMap.put(customerThree.getId(), customerThree);
-		
+		customerMap.put(customer1.getId(), customer1);
+		customerMap.put(customer2.getId(), customer2);
+		customerMap.put(customer3.getId(), customer3);
 	}
 
 	@Override
-	public List<Customer> listCustomers() {
-		return new ArrayList<>(customerMap.values());
+	public void patchCustomerById(UUID customerId, CustomerDTO customer) {
+		CustomerDTO existing = customerMap.get(customerId);
+
+		if (StringUtils.hasText(customer.getName())) {
+			existing.setName(customer.getName());
+		}
 	}
 
 	@Override
-	public Customer getCustomerById(UUID id) {
-		return customerMap.get(id);
-	}
-
-	@Override
-	public Customer saveNewCustomer(Customer customer) {
-		customer.setId(UUID.randomUUID());
-		customer.setCreatedDate(LocalDateTime.now());
-		customer.setLastModifiedDate(LocalDateTime.now());
-		
-		customerMap.put(customer.getId(), customer);
-		return customer;
-	}
-
-	@Override
-	public void updateById(UUID customerId, Customer customer) {
-		var existing = customerMap.get(customerId);
-		existing.setCustomerName(customer.getCustomerName());
-	}
-
-	@Override
-	public void deleteById(UUID customerId) {
+	public void deleteCustomerById(UUID customerId) {
 		customerMap.remove(customerId);
 	}
 
 	@Override
-	public void patchCustomerById(UUID customerId, Customer customer) {
-		var existing = customerMap.get(customer);
-		
-		if (existing != null) {
-			mapper.updateCustomerFromDto(customer, existing);
-		}
+	public void updateCustomerById(UUID customerId, CustomerDTO customer) {
+		CustomerDTO existing = customerMap.get(customerId);
+		existing.setName(customer.getName());
 	}
 
+	@Override
+	public CustomerDTO saveNewCustomer(CustomerDTO customer) {
+
+		CustomerDTO savedCustomer = CustomerDTO.builder()
+				.id(UUID.randomUUID())
+				.version(1)
+				.updateDate(LocalDateTime.now())
+				.createdDate(LocalDateTime.now())
+				.name(customer.getName())
+				.build();
+
+		customerMap.put(savedCustomer.getId(), savedCustomer);
+
+		return savedCustomer;
+	}
+
+	@Override
+	public Optional<CustomerDTO> getCustomerById(UUID uuid) {
+		return Optional.of(customerMap.get(uuid));
+	}
+
+	@Override
+	public List<CustomerDTO> listCustomers() {
+		return new ArrayList<>(customerMap.values());
+	}
 }

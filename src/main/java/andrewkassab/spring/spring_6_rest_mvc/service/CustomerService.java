@@ -1,23 +1,22 @@
 package andrewkassab.spring.spring_6_rest_mvc.service;
 
+import andrewkassab.spring.spring_6_rest_mvc.model.CustomerDTO;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import andrewkassab.spring.spring_6_rest_mvc.model.Beer;
-import andrewkassab.spring.spring_6_rest_mvc.model.Customer;
-
 public interface CustomerService {
-	
-	public List<Customer> listCustomers();
-	
-	public Customer getCustomerById(UUID id);
 
-	public Customer saveNewCustomer(Customer customer);
+	Optional<CustomerDTO> getCustomerById(UUID uuid);
 
-	public void updateById(UUID customerId, Customer customer);
+	List<CustomerDTO> listCustomers();
 
-	public void deleteById(UUID customerId);
+	CustomerDTO saveNewCustomer(CustomerDTO customer);
 
-	public void patchCustomerById(UUID customerId, Customer customer);
+	void updateCustomerById(UUID customerId, CustomerDTO customer);
 
+	void deleteCustomerById(UUID customerId);
+
+	void patchCustomerById(UUID customerId, CustomerDTO customer);
 }

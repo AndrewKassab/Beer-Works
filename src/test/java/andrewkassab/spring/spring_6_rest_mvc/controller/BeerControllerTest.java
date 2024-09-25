@@ -2,7 +2,7 @@ package andrewkassab.spring.spring_6_rest_mvc.controller;
 
 import java.util.*;
 
-import andrewkassab.spring.spring_6_rest_mvc.exception.NotFoundException;
+import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import andrewkassab.spring.spring_6_rest_mvc.model.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.service.BeerService;
 import andrewkassab.spring.spring_6_rest_mvc.service.BeerServiceImpl;
 
@@ -46,7 +45,7 @@ public class BeerControllerTest {
 	ArgumentCaptor<UUID> uuidCaptor;
 	
 	@Captor
-	ArgumentCaptor<Beer> beerCaptor; 
+	ArgumentCaptor<BeerDTO> beerCaptor;
 	
 	@BeforeEach
 	public void setup() {
@@ -54,17 +53,17 @@ public class BeerControllerTest {
 		objectMapper.findAndRegisterModules();
 	}
 	
-	public Beer getABeer() {
+	public BeerDTO getABeer() {
 		return beerServiceImpl.listBeers().get(0);
 	}
 	
-	public List<Beer> getBeerList() {
+	public List<BeerDTO> getBeerList() {
 		return beerServiceImpl.listBeers();
 	}
 	
 	@Test
 	public void testPatchBeer() throws Exception {
-		Beer beer = getABeer();
+		BeerDTO beer = getABeer();
 		
 		Map<String, Object> beerMap = new HashMap<>();
 		beerMap.put("beerName", "New Name");
@@ -83,7 +82,7 @@ public class BeerControllerTest {
 
 	@Test
 	public void testDeleteBeer() throws Exception {
-		Beer beer = getABeer();
+		BeerDTO beer = getABeer();
 		
 		mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
 				.accept(MediaType.APPLICATION_JSON))
@@ -94,7 +93,7 @@ public class BeerControllerTest {
 
 	@Test
 	public void testUpdateBeer() throws Exception {
-		Beer beer = getABeer();
+		BeerDTO beer = getABeer();
 		beer.setBeerName("New name");
 		
 		mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
@@ -108,7 +107,7 @@ public class BeerControllerTest {
 
 	@Test
 	public void testCreateNewBeer() throws Exception {
-		Beer beer = getABeer();
+		BeerDTO beer = getABeer();
 		
 		Mockito.when(beerService.saveNewBeer(beer)).thenReturn(beer);
 		
@@ -122,7 +121,7 @@ public class BeerControllerTest {
 
 	@Test
 	public void testGetBeerById() throws Exception {
-		var expectedBeer = Beer.builder()
+		var expectedBeer = BeerDTO.builder()
 				.id(UUID.randomUUID())
 				.beerName("Test name")
 				.build();
@@ -158,7 +157,7 @@ public class BeerControllerTest {
 
 		var jsonResponse = result.getResponse().getContentAsString();
 		
-		List<Beer> beerList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
+		List<BeerDTO> beerList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
 		assertEquals(beerServiceImpl.listBeers(), beerList);
 	}

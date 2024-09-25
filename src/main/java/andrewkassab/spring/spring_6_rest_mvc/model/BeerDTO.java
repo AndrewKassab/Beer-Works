@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Beer {
+public class BeerDTO {
 	
 	private UUID id;
 	private Integer version;

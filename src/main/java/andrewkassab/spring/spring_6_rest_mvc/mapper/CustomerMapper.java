@@ -1,13 +1,18 @@
 package andrewkassab.spring.spring_6_rest_mvc.mapper;
 
-import andrewkassab.spring.spring_6_rest_mvc.model.Customer;
+import andrewkassab.spring.spring_6_rest_mvc.entity.Customer;
+import andrewkassab.spring.spring_6_rest_mvc.model.CustomerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CustomerMapper {
 
-    void updateCustomerFromDto(Customer updatedCustomer, @MappingTarget Customer existingCustomer);
+    Customer customerDtoToCustomer(CustomerDTO customerDto);
+
+    CustomerDTO customerToCustomerDto(Customer customer);
+
+    void updateCustomerFromDto(CustomerDTO updatedCustomer, @MappingTarget Customer existingCustomer);
 
 }

@@ -4,20 +4,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import andrewkassab.spring.spring_6_rest_mvc.model.Beer;
+import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 
 public interface BeerService {
 	
-	public List<Beer> listBeers();
+	public List<BeerDTO> listBeers();
 
-	public Optional<Beer> getBeerById(UUID id);
+	public Optional<BeerDTO> getBeerById(UUID id);
 
-	public Beer saveNewBeer(Beer beer);
+	public BeerDTO saveNewBeer(BeerDTO beer);
 
-	public void updateBeerById(UUID beerId, Beer beer);
+	public void updateBeerById(UUID beerId, BeerDTO beer);
 
 	public void deleteById(UUID beerId);
 
-	public void patchBeerById(UUID beerId, Beer beer);
+	public void patchBeerById(UUID beerId, BeerDTO beer);
 
 }
