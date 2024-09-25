@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import andrewkassab.spring.spring_6_rest_mvc.mapper.GenericMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BeerServiceImpl implements BeerService {
 	
+	@Autowired
+	GenericMapper<Beer> mapper;
+
 	private Map<UUID, Beer> beerMap;
 	
 	public BeerServiceImpl() {
@@ -75,6 +81,42 @@ public class BeerServiceImpl implements BeerService {
 		
 		return this.beerMap.get(id);
 
+	}
+	
+	public Beer saveNewBeer(Beer beer) {
+		beer.setId(UUID.randomUUID());
+		beer.setCreatedDate(LocalDateTime.now());
+		beer.setUpdateDate(LocalDateTime.now());
+		
+		beerMap.put(beer.getId(), beer);
+		
+		return beer;
+	}
+
+	@Override
+	public void updateBeerById(UUID beerId, Beer beer) {
+		Beer existing = beerMap.get(beerId);
+		existing.setBeerName(beer.getBeerName());
+		existing.setPrice(beer.getPrice());
+		existing.setUpc(beer.getUpc());
+		existing.setQuantityOnHand(beer.getQuantityOnHand());
+		existing.setBeerStyle(beer.getBeerStyle());
+	}
+
+	@Override
+	public void deleteById(UUID beerId) {
+		beerMap.remove(beerId);
+	}
+
+	@Override
+	public void patchBeerById(UUID beerId, Beer beer) {
+		Beer existing = beerMap.get(beerId);
+		
+		if (existing != null) {
+			mapper.updateEntityFromDto(beer, existing);
+		}
+		
+		existing.setUpdateDate(LocalDateTime.now());
 	}
 
 }
