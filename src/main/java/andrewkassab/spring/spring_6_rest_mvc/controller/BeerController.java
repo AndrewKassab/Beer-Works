@@ -27,26 +27,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/beer")
 public class BeerController {
+	
+	public static final String BEER_PATH = "/api/v1/beer";
+	public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 				
 	@Autowired
 	private final BeerService beerService;
 	
-	@DeleteMapping("/{beerId}")
+	@DeleteMapping(BEER_PATH_ID)
 	public ResponseEntity<?> deleteById(@PathVariable UUID beerId) {
 		beerService.deleteById(beerId);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PatchMapping("/{beerId}")
+	@PatchMapping(BEER_PATH_ID)
 	public ResponseEntity<?> updateBeerPatchById(@PathVariable UUID beerId, @RequestBody Beer beer) {
 		beerService.patchBeerById(beerId, beer);
 		
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PutMapping("/{beerId}")
+	@PutMapping(BEER_PATH_ID)
 	public ResponseEntity<?> updateById(@PathVariable UUID beerId, @RequestBody Beer beer) {
 		
 		beerService.updateBeerById(beerId, beer);
@@ -54,19 +56,19 @@ public class BeerController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PostMapping
+	@PostMapping(BEER_PATH)
 	public ResponseEntity<?> handlePost(@RequestBody Beer beer) {
 		Beer savedBeer = beerService.saveNewBeer(beer);
 		
 		return ResponseEntity.created(URI.create("/api/v1/beer/" + savedBeer.getId().toString())).build();
 	}
 
-	@GetMapping
+	@GetMapping(BEER_PATH)
 	public List<Beer> listBeers() {
 		return beerService.listBeers();
 	}
 
-	@GetMapping("/{beerId}")
+	@GetMapping(BEER_PATH_ID)
 	public Beer getBeerById(@PathVariable UUID beerId) {
 		log.debug("Get Beer by Id - in controller");
 		

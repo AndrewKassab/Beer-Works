@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -71,7 +70,7 @@ public class BeerControllerTest {
 		Map<String, Object> beerMap = new HashMap<>();
 		beerMap.put("beerName", "New Name");
 		
-		mockMvc.perform(patch("/api/v1/beer/" + beer.getId())
+		mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
 				.accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(beerMap)))
@@ -87,7 +86,7 @@ public class BeerControllerTest {
 	public void testDeleteBeer() throws Exception {
 		Beer beer = getABeer();
 		
-		mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+		mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 		
@@ -99,7 +98,7 @@ public class BeerControllerTest {
 		Beer beer = getABeer();
 		beer.setBeerName("New name");
 		
-		mockMvc.perform(put("/api/v1/beer/" + beer.getId())
+		mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
 					.accept(MediaType.APPLICATION_JSON)
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsString(beer)))
@@ -114,7 +113,7 @@ public class BeerControllerTest {
 		
 		Mockito.when(beerService.saveNewBeer(beer)).thenReturn(beer);
 		
-		mockMvc.perform(post("/api/v1/beer")
+		mockMvc.perform(post(BeerController.BEER_PATH)
 					.accept(MediaType.APPLICATION_JSON)
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(objectMapper.writeValueAsString(beer)))
@@ -131,7 +130,7 @@ public class BeerControllerTest {
 		
 		Mockito.when(beerService.getBeerById(expectedBeer.getId())).thenReturn(expectedBeer);
 
-		mockMvc.perform(get("/api/v1/beer/" + expectedBeer.getId())
+		mockMvc.perform(get(BeerController.BEER_PATH_ID, expectedBeer.getId())
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -144,7 +143,7 @@ public class BeerControllerTest {
 		var expectedBeerList = getBeerList();
 		Mockito.when(beerService.listBeers()).thenReturn(expectedBeerList);
 		
-		var result = mockMvc.perform(get("/api/v1/beer")
+		var result = mockMvc.perform(get(BeerController.BEER_PATH)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
