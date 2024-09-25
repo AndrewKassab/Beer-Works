@@ -1,5 +1,20 @@
 package andrewkassab.spring.spring_6_rest_mvc.controller;
 
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class BeerControllerTest {
+	
+	@Autowired
+	BeerController beerController;
+	
+	@Test
+	public void getBeerById() {
+		System.out.println(beerController.getBeerById(UUID.randomUUID()));
+	}
 
 }
