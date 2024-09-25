@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import andrewkassab.spring.spring_6_rest_mvc.mapper.CustomerMapper;
 import org.springframework.stereotype.Service;
 
-import andrewkassab.spring.spring_6_rest_mvc.mapper.GenericMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.Customer;
 
 @Service
@@ -17,7 +17,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private Map<UUID, Customer> customerMap;
 	
-	private GenericMapper<Customer> mapper;
+	private CustomerMapper mapper;
 	
 	public CustomerServiceImpl() {
 		customerMap = new HashMap<>();
@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
 		var existing = customerMap.get(customer);
 		
 		if (existing != null) {
-			mapper.updateEntityFromDto(customer, existing);
+			mapper.updateCustomerFromDto(customer, existing);
 		}
 	}
 

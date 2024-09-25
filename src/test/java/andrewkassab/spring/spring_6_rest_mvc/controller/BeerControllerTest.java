@@ -1,10 +1,8 @@
 package andrewkassab.spring.spring_6_rest_mvc.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import andrewkassab.spring.spring_6_rest_mvc.exception.NotFoundException;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +23,7 @@ import andrewkassab.spring.spring_6_rest_mvc.service.BeerService;
 import andrewkassab.spring.spring_6_rest_mvc.service.BeerServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -122,13 +121,13 @@ public class BeerControllerTest {
 	}
 
 	@Test
-	public void getBeerById() throws Exception {
+	public void testGetBeerById() throws Exception {
 		var expectedBeer = Beer.builder()
 				.id(UUID.randomUUID())
 				.beerName("Test name")
 				.build();
 		
-		Mockito.when(beerService.getBeerById(expectedBeer.getId())).thenReturn(expectedBeer);
+		Mockito.when(beerService.getBeerById(expectedBeer.getId())).thenReturn(Optional.of(expectedBeer));
 
 		mockMvc.perform(get(BeerController.BEER_PATH_ID, expectedBeer.getId())
 				.accept(MediaType.APPLICATION_JSON))
@@ -137,7 +136,14 @@ public class BeerControllerTest {
 				.andExpect(jsonPath("$.id", Is.is(expectedBeer.getId().toString())))
 				.andExpect(jsonPath("$.beerName", Is.is(expectedBeer.getBeerName())));
 	}
-	
+
+	@Test
+	public void testGetBeerByIdNotFound() throws Exception {
+		Mockito.when(beerService.getBeerById(any(UUID.class))).thenReturn(Optional.empty());
+
+		mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID()))
+				.andExpect(status().isNotFound());
+	}
 	@Test
 	public void testListBeers() throws Exception {
 		var expectedBeerList = getBeerList();
@@ -152,7 +158,7 @@ public class BeerControllerTest {
 
 		var jsonResponse = result.getResponse().getContentAsString();
 		
-		List<Beer> beerList = objectMapper.readValue(jsonResponse, new TypeReference<List<Beer>>() {});
+		List<Beer> beerList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
 		assertEquals(beerServiceImpl.listBeers(), beerList);
 	}

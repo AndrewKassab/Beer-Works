@@ -2,17 +2,12 @@ package andrewkassab.spring.spring_6_rest_mvc.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import andrewkassab.spring.spring_6_rest_mvc.mapper.BeerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import andrewkassab.spring.spring_6_rest_mvc.mapper.GenericMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BeerServiceImpl implements BeerService {
 	
-	@Autowired
-	GenericMapper<Beer> mapper;
+	BeerMapper mapper;
 
 	private Map<UUID, Beer> beerMap;
 	
@@ -75,11 +69,11 @@ public class BeerServiceImpl implements BeerService {
 		return new ArrayList<>(beerMap.values());
 	}
 	
-	public Beer getBeerById(UUID id) {
+	public Optional<Beer> getBeerById(UUID id) {
 		
 		log.debug("Get Beer Id in service was called");
 		
-		return this.beerMap.get(id);
+		return Optional.of(beerMap.get(id));
 
 	}
 	
@@ -113,7 +107,7 @@ public class BeerServiceImpl implements BeerService {
 		Beer existing = beerMap.get(beerId);
 		
 		if (existing != null) {
-			mapper.updateEntityFromDto(beer, existing);
+			mapper.updateBeerFromDto(beer, existing);
 		}
 		
 		existing.setUpdateDate(LocalDateTime.now());
