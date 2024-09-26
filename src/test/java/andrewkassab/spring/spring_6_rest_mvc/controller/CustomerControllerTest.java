@@ -24,7 +24,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import andrewkassab.spring.spring_6_rest_mvc.service.CustomerService;
@@ -57,7 +56,7 @@ class CustomerControllerTest {
 
 	@Test
 	void testPatchCustomer() throws Exception {
-		CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 
 		Map<String, Object> customerMap = new HashMap<>();
 		customerMap.put("name", "New Name");
@@ -76,7 +75,7 @@ class CustomerControllerTest {
 
 	@Test
 	void testDeleteCustomer() throws Exception {
-		CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 
 		mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
 						.contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +88,7 @@ class CustomerControllerTest {
 
 	@Test
 	void testUpdateCustomer() throws Exception {
-		CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 
 		mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
 						.content(objectMapper.writeValueAsString(customer))
@@ -104,12 +103,12 @@ class CustomerControllerTest {
 
 	@Test
 	void testCreateCustomer() throws Exception {
-		CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 		customer.setId(null);
 		customer.setVersion(null);
 
 		Mockito.when(customerService.saveNewCustomer(any(CustomerDTO.class)))
-				.thenReturn(customerServiceImpl.listCustomers().get(1));
+				.thenReturn(customerServiceImpl.getAllCustomers().get(1));
 
 		mockMvc.perform(post(CustomerController.CUSTOMER_PATH).contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -120,7 +119,7 @@ class CustomerControllerTest {
 
 	@Test
 	void listAllCustomers() throws Exception {
-		Mockito.when(customerService.listCustomers()).thenReturn(customerServiceImpl.listCustomers());
+		Mockito.when(customerService.getAllCustomers()).thenReturn(customerServiceImpl.getAllCustomers());
 
 		mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
 						.accept(MediaType.APPLICATION_JSON))
@@ -140,7 +139,7 @@ class CustomerControllerTest {
 
 	@Test
 	void getCustomerById() throws Exception {
-		CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
+		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 
 		Mockito.when(customerService.getCustomerById(customer.getId())).thenReturn(Optional.of(customer));
 

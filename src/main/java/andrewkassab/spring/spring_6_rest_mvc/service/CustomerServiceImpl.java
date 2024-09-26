@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<CustomerDTO> listCustomers() {
+	public List<CustomerDTO> getAllCustomers() {
 		return new ArrayList<>(customerMap.values());
 	}
 }

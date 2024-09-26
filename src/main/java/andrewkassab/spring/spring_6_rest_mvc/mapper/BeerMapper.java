@@ -10,10 +10,10 @@ import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BeerMapper {
 
-    Beer beerDtoToBeer(BeerDTO beerDto);
+    public Beer beerDtoToBeer(BeerDTO beerDto);
 
-    BeerDTO beerToBeerDto(Beer beer);
+    public BeerDTO beerToBeerDto(Beer beer);
 
-    void updateBeerFromDto(BeerDTO updatedBeer, @MappingTarget BeerDTO existingBeer);
+    public void updateBeerFromDto(BeerDTO updatedBeer, @MappingTarget BeerDTO existingBeer);
 
 }
