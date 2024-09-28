@@ -2,6 +2,7 @@ package andrewkassab.spring.spring_6_rest_mvc.controller;
 
 import java.util.*;
 
+import andrewkassab.spring.spring_6_rest_mvc.entity.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,6 +111,19 @@ public class BeerControllerTest {
 	}
 
 	@Test
+	public void testUpdateBeerMissingName() throws Exception {
+		BeerDTO beer = getABeer();
+		beer.setBeerName(null);
+
+		mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(beer)))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.length()", Is.is(2)));
+	}
+
+	@Test
 	public void testCreateNewBeer() throws Exception {
 		BeerDTO beer = getABeer();
 		
@@ -121,6 +135,18 @@ public class BeerControllerTest {
 					.content(objectMapper.writeValueAsString(beer)))
 				.andExpect(status().isCreated())
 				.andExpect(header().exists("Location"));
+	}
+
+	@Test
+	public void testCreateBeerNullBeerName() throws Exception {
+		BeerDTO beerDto = BeerDTO.builder().build();
+
+		mockMvc.perform(post(BeerController.BEER_PATH)
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(beerDto)))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.length()", Is.is(5)));
 	}
 
 	@Test
