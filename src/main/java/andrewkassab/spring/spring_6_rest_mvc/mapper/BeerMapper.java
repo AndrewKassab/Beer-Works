@@ -14,6 +14,6 @@ public interface BeerMapper {
 
     public BeerDTO beerToBeerDto(Beer beer);
 
-    public void updateBeerFromDto(BeerDTO updatedBeer, @MappingTarget BeerDTO existingBeer);
+    public void updateBeerFromDto(@MappingTarget Beer existingBeer, BeerDTO updatedBeer);
 
 }

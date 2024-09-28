@@ -3,6 +3,7 @@ package andrewkassab.spring.spring_6_rest_mvc.controller;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -70,12 +71,15 @@ class CustomerControllerTest {
 				customerArgumentCaptor.capture());
 
 		assertThat(uuidArgumentCaptor.getValue()).isEqualTo(customer.getId());
-		assertThat(customerArgumentCaptor.getValue().getName()).isEqualTo(customerMap.get("name"));
+		assertThat(customerArgumentCaptor.getValue().getName())
+				.isEqualTo(customerMap.get("name"));
 	}
 
 	@Test
 	void testDeleteCustomer() throws Exception {
 		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
+
+		given(customerService.deleteCustomerById(any())).willReturn(true);
 
 		mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
 						.contentType(MediaType.APPLICATION_JSON))
@@ -89,6 +93,9 @@ class CustomerControllerTest {
 	@Test
 	void testUpdateCustomer() throws Exception {
 		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
+
+		given(customerService.updateCustomerById(any(), any())).willReturn(Optional.of(CustomerDTO.builder()
+				.build()));
 
 		mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
 						.content(objectMapper.writeValueAsString(customer))
@@ -107,8 +114,8 @@ class CustomerControllerTest {
 		customer.setId(null);
 		customer.setVersion(null);
 
-		Mockito.when(customerService.saveNewCustomer(any(CustomerDTO.class)))
-				.thenReturn(customerServiceImpl.getAllCustomers().get(1));
+		given(customerService.saveNewCustomer(any(CustomerDTO.class)))
+				.willReturn(customerServiceImpl.getAllCustomers().get(1));
 
 		mockMvc.perform(post(CustomerController.CUSTOMER_PATH).contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
@@ -119,7 +126,7 @@ class CustomerControllerTest {
 
 	@Test
 	void listAllCustomers() throws Exception {
-		Mockito.when(customerService.getAllCustomers()).thenReturn(customerServiceImpl.getAllCustomers());
+		given(customerService.getAllCustomers()).willReturn(customerServiceImpl.getAllCustomers());
 
 		mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
 						.accept(MediaType.APPLICATION_JSON))
@@ -131,7 +138,7 @@ class CustomerControllerTest {
 	@Test
 	void getCustomerByIdNotFound() throws Exception {
 
-		Mockito.when(customerService.getCustomerById(any(UUID.class))).thenReturn(Optional.empty());
+		given(customerService.getCustomerById(any(UUID.class))).willReturn(Optional.empty());
 
 		mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID()))
 				.andExpect(status().isNotFound());
@@ -141,7 +148,7 @@ class CustomerControllerTest {
 	void getCustomerById() throws Exception {
 		CustomerDTO customer = customerServiceImpl.getAllCustomers().get(0);
 
-		Mockito.when(customerService.getCustomerById(customer.getId())).thenReturn(Optional.of(customer));
+		given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
 
 		mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, customer.getId())
 						.accept(MediaType.APPLICATION_JSON))

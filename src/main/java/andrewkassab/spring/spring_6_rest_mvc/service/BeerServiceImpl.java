@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import andrewkassab.spring.spring_6_rest_mvc.entity.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.mapper.BeerMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import org.springframework.stereotype.Service;
@@ -98,19 +99,21 @@ public class BeerServiceImpl implements BeerService {
 	}
 
 	@Override
-	public void deleteById(UUID beerId) {
+	public boolean deleteById(UUID beerId) {
 		beerMap.remove(beerId);
+		return true;
 	}
 
 	@Override
-	public void patchBeerById(UUID beerId, BeerDTO beer) {
-		BeerDTO existing = beerMap.get(beerId);
-		
+	public Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO updatedBeer) {
+		Beer existing = mapper.beerDtoToBeer(beerMap.get(beerId));
+
 		if (existing != null) {
-			mapper.updateBeerFromDto(beer, existing);
+			mapper.updateBeerFromDto(existing, updatedBeer);
 		}
 		
 		existing.setUpdateDate(LocalDateTime.now());
+		return Optional.of(mapper.beerToBeerDto(existing));
 	}
 
 }

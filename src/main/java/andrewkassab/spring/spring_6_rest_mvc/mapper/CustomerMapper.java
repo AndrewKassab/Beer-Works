@@ -13,6 +13,6 @@ public interface CustomerMapper {
 
     CustomerDTO customerToCustomerDto(Customer customer);
 
-    void updateCustomerFromDto(CustomerDTO updatedCustomer, @MappingTarget Customer existingCustomer);
+    void updateCustomerFromDto(@MappingTarget Customer existingCustomer, CustomerDTO updatedCustomer);
 
 }
