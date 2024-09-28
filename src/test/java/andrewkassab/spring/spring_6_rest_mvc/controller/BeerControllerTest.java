@@ -95,6 +95,8 @@ public class BeerControllerTest {
 	public void testUpdateBeer() throws Exception {
 		BeerDTO beer = getABeer();
 		beer.setBeerName("New name");
+
+		Mockito.when(beerService.updateBeerById(beer.getId(), beer)).thenReturn(Optional.of(beer));
 		
 		mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
 					.accept(MediaType.APPLICATION_JSON)
