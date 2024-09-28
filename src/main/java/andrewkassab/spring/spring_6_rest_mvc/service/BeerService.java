@@ -14,7 +14,7 @@ public interface BeerService {
 
 	public BeerDTO saveNewBeer(BeerDTO beer);
 
-	public void updateBeerById(UUID beerId, BeerDTO beer);
+	public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer);
 
 	public void deleteById(UUID beerId);
 
