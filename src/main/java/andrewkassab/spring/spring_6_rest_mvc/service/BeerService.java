@@ -9,7 +9,7 @@ import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 
 public interface BeerService {
 	
-	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle);
+	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
 
 	public Optional<BeerDTO> getBeerById(UUID id);
 

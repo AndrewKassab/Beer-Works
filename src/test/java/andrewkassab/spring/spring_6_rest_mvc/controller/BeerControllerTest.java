@@ -54,11 +54,11 @@ public class BeerControllerTest {
 	}
 	
 	public BeerDTO getABeer() {
-		return beerServiceImpl.listBeers(null, null).get(0);
+		return beerServiceImpl.listBeers(null, null, null).get(0);
 	}
 	
 	public List<BeerDTO> getBeerList() {
-		return beerServiceImpl.listBeers(null, null);
+		return beerServiceImpl.listBeers(null, null, null);
 	}
 	
 	@Test
@@ -175,7 +175,7 @@ public class BeerControllerTest {
 	@Test
 	public void testListBeers() throws Exception {
 		var expectedBeerList = getBeerList();
-		Mockito.when(beerService.listBeers(null, null)).thenReturn(expectedBeerList);
+		Mockito.when(beerService.listBeers(null, null, null)).thenReturn(expectedBeerList);
 		
 		var result = mockMvc.perform(get(BeerController.BEER_PATH)
 				.accept(MediaType.APPLICATION_JSON))
@@ -188,7 +188,7 @@ public class BeerControllerTest {
 		
 		List<BeerDTO> beerList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
-		assertEquals(beerServiceImpl.listBeers(null, null), beerList);
+		assertEquals(beerServiceImpl.listBeers(null, null, null), beerList);
 	}
 
 }
