@@ -65,7 +65,7 @@ public class BeerServiceImpl implements BeerService {
 		
 	}
 	
-	public List<BeerDTO> listBeers() {
+	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle) {
 		return new ArrayList<>(beerMap.values());
 	}
 	

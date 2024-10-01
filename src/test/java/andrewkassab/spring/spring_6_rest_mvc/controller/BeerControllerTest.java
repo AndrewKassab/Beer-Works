@@ -2,7 +2,6 @@ package andrewkassab.spring.spring_6_rest_mvc.controller;
 
 import java.util.*;
 
-import andrewkassab.spring.spring_6_rest_mvc.entity.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,11 +54,11 @@ public class BeerControllerTest {
 	}
 	
 	public BeerDTO getABeer() {
-		return beerServiceImpl.listBeers().get(0);
+		return beerServiceImpl.listBeers(null, null).get(0);
 	}
 	
 	public List<BeerDTO> getBeerList() {
-		return beerServiceImpl.listBeers();
+		return beerServiceImpl.listBeers(null, null);
 	}
 	
 	@Test
@@ -176,7 +175,7 @@ public class BeerControllerTest {
 	@Test
 	public void testListBeers() throws Exception {
 		var expectedBeerList = getBeerList();
-		Mockito.when(beerService.listBeers()).thenReturn(expectedBeerList);
+		Mockito.when(beerService.listBeers(null, null)).thenReturn(expectedBeerList);
 		
 		var result = mockMvc.perform(get(BeerController.BEER_PATH)
 				.accept(MediaType.APPLICATION_JSON))
@@ -189,7 +188,7 @@ public class BeerControllerTest {
 		
 		List<BeerDTO> beerList = objectMapper.readValue(jsonResponse, new TypeReference<>() {});
 
-		assertEquals(beerServiceImpl.listBeers(), beerList);
+		assertEquals(beerServiceImpl.listBeers(null, null), beerList);
 	}
 
 }

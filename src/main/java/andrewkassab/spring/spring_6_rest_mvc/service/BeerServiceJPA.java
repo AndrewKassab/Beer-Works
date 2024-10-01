@@ -1,11 +1,14 @@
 package andrewkassab.spring.spring_6_rest_mvc.service;
 
+import andrewkassab.spring.spring_6_rest_mvc.entity.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.mapper.BeerMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
+import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 import andrewkassab.spring.spring_6_rest_mvc.repository.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +25,19 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> listBeers() {
-        return beerRepository.findAll()
-                .stream()
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle) {
+
+        List<Beer> beerList;
+
+        if (StringUtils.hasText(beerName) && beerStyle == null) {
+            beerList = beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
+        } else if (!StringUtils.hasText(beerName) && beerStyle != null) {
+            beerList = beerRepository.findAllByBeerStyle(beerStyle);
+        } else {
+            beerList = beerRepository.findAll();
+        }
+
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
                 .collect(Collectors.toList());
     }

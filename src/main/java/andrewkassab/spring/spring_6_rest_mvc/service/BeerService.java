@@ -5,10 +5,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
+import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 
 public interface BeerService {
 	
-	public List<BeerDTO> listBeers();
+	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle);
 
 	public Optional<BeerDTO> getBeerById(UUID id);
 

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import andrewkassab.spring.spring_6_rest_mvc.exception.NotFoundException;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
+import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -59,8 +60,9 @@ public class BeerController {
 	}
 
 	@GetMapping(BEER_PATH)
-	public List<BeerDTO> listBeers() {
-		return beerService.listBeers();
+	public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
+								   @RequestParam(required = false) BeerStyle beerStyle) {
+		return beerService.listBeers(beerName, beerStyle);
 	}
 
 	@GetMapping(BEER_PATH_ID)
