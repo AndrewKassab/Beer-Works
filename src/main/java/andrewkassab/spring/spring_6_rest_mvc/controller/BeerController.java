@@ -8,6 +8,7 @@ import andrewkassab.spring.spring_6_rest_mvc.exception.NotFoundException;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,10 +61,12 @@ public class BeerController {
 	}
 
 	@GetMapping(BEER_PATH)
-	public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
+	public Page<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
 								   @RequestParam(required = false) BeerStyle beerStyle,
-								   @RequestParam(required = false) Boolean showInventory) {
-		return beerService.listBeers(beerName, beerStyle, showInventory);
+								   @RequestParam(required = false) Boolean showInventory,
+								   @RequestParam(required = false) Integer pageNumber,
+								   @RequestParam(required = false) Integer pageSize) {
+		return beerService.listBeers(beerName, beerStyle, showInventory, pageNumber, pageSize);
 	}
 
 	@GetMapping(BEER_PATH_ID)

@@ -6,10 +6,11 @@ import java.util.UUID;
 
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
+import org.springframework.data.domain.Page;
 
 public interface BeerService {
 	
-	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
+	public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize);
 
 	public Optional<BeerDTO> getBeerById(UUID id);
 

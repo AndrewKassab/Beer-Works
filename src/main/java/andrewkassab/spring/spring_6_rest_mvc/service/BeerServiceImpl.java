@@ -7,6 +7,8 @@ import java.util.*;
 import andrewkassab.spring.spring_6_rest_mvc.entity.Beer;
 import andrewkassab.spring.spring_6_rest_mvc.mapper.BeerMapper;
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import andrewkassab.spring.spring_6_rest_mvc.model.BeerStyle;
@@ -65,8 +67,8 @@ public class BeerServiceImpl implements BeerService {
 		
 	}
 	
-	public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory) {
-		return new ArrayList<>(beerMap.values());
+	public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+		return new PageImpl<>(new ArrayList<>(beerMap.values()));
 	}
 	
 	public Optional<BeerDTO> getBeerById(UUID id) {
