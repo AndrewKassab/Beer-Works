@@ -14,6 +14,7 @@ import org.springframework.lang.NonNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -47,6 +48,15 @@ public class Beer {
 	private	String upc;
 
 	private Integer quantityOnHand;
+
+	@OneToMany(mappedBy = "beer")
+	private Set<BeerOrderLine> beerOrderLines;
+
+	@ManyToMany
+	@JoinTable(name = "beer_category",
+			joinColumns = @JoinColumn(name = "beer_id"),
+			inverseJoinColumns = @JoinColumn(name = "category_id"))
+	private Set<Category> categories;
 
 	@NotNull
 	private BigDecimal price;
